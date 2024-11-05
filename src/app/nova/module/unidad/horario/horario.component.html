@@ -1,0 +1,19 @@
+<app-title title="Horarios de operación" icon-src="assets/icon/schedule/icon.png"></app-title>
+<p-panel>
+  <p-table [value]="horarios">
+    <ng-template pTemplate="header">
+      <tr>
+        <th>Unidad</th>
+        <th>Apertura</th>
+        <th>Cierre</th>
+      </tr>
+    </ng-template>
+    <ng-template pTemplate="body" let-data>
+      <tr>
+        <td>{{ data.unidad.clave }} {{ data.unidad.nombre }}</td>
+        <td>{{ data.horario.apertura }}</td>
+        <td>{{ data.horario.cierre }}</td>
+      </tr>
+    </ng-template>
+  </p-table>
+</p-panel>

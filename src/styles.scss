@@ -1,0 +1,24 @@
+$gutter: 1rem;
+@import "primeng/resources/themes/aura-light-blue/theme.css";
+@import "primeng/resources/primeng.min.css";
+@import "primeicons/primeicons.css";
+
+@import "quill/dist/quill.core.css";
+@import "quill/dist/quill.snow.css";
+
+@import "../public/assets/styles/layout/layout";
+@import "../public/assets/icon/novaicon";
+//
+//:root {
+//  --surface-ground: #dfe3e8
+//}
+.is-required:after {
+  content: '*';
+  margin-left: 3px;
+  color: red;
+  font-weight: bold;
+}
+.p-toast-detail{
+  font-size: 1rem;
+  color:black;
+}

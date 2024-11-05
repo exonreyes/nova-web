@@ -1,0 +1,76 @@
+<p-table
+  #dt
+  [globalFilterFields]="['creado','folio','reporte.nombre','area.nombre','unidad.nombre','unidad.clave','estatus.nombre']"
+  [scrollable]="true"
+  [tableStyle]="{ 'min-width': '50rem' }"
+  [value]=dataTickets
+  [loading]="pageTicket.loading"
+  scrollHeight="flex">
+  <ng-template pTemplate="header">
+    <tr>
+      <th>#</th>
+      <th>Reporte</th>
+      <th>Folio</th>
+      <th>Unidad</th>
+      <th>Area de seguimiento</th>
+      <th>Estatus</th>
+      <th>Creado</th>
+      <th></th>
+    </tr>
+  </ng-template>
+  <ng-template pTemplate="caption">
+    <div class="flex justify-content-start gap-3">
+      <p-iconField iconPosition="left">
+        <p-inputIcon styleClass="pi pi-search"/>
+        <input #iFilterResult (input)="dt.filterGlobal($any($event.target).value, 'contains')" class="w-13rem"
+               pInputText placeholder="Buscar en resultados" type="text"/>
+      </p-iconField>
+      <p-button (click)="syncData(dt,iFilterResult)" icon="pi pi-cloud-download" severity="secondary"></p-button>
+    </div>
+  </ng-template>
+  <ng-template let-data pTemplate="body" let-rowIndex="rowIndex">
+    <tr class="fadein animation-duration-100">
+      <td>{{ dt.first + rowIndex + 1 }}</td>
+      <td>{{ data.reporte.nombre }}</td>
+      <td [routerLink]="['/ticket',data.folio]" class="cursor-pointer">{{ data.folio }}</td>
+      <td>{{ data.unidad.clave }} {{ data.unidad.nombre }}</td>
+      <td>{{ data.area.nombre }}</td>
+      <td><span [class.p-tag-success]="data.estatus.nombre.toLowerCase() === 'abierto'"
+                [class.p-tag-warning]="data.estatus.nombre.toLowerCase() === 'pendiente'"
+                class="p-tag p-component text-sm">{{ data.estatus.nombre }}
+          </span></td>
+      <td>{{ data.creado }}</td>
+      <td>
+        <div class="flex flex-row gap-2">
+          <p-button [routerLink]="['/ticket',data.folio]" icon="pi pi-info-circle" severity="secondary"/>
+          <p-button (onClick)="copyDataTicket(data)" icon="pi pi-copy" severity="secondary"></p-button>
+        </div>
+      </td>
+    </tr>
+  </ng-template>
+  <ng-template pTemplate="emptymessage">
+    <tr>
+      <td class="border-none" colspan="6">
+        <div class="flex align-items-center flex-column">
+          <app-status description="Puede sincronizar la tabla o aplicar criterios de búsqueda"
+                      [title]="{text:'Sin registros en la página',color:'text-orange-700'}"
+                      icon-src="assets/icon/notfound/icon.svg"
+          />
+        </div>
+      </td>
+    </tr>
+  </ng-template>
+  <ng-template pTemplate="loadingicon">
+    <app-spinner></app-spinner>
+  </ng-template>
+  <ng-template pTemplate="summary">
+    <p-paginator
+      (onPageChange)="onPageChange($event)"
+      [first]="pageTicket.first"
+      [rows]="pageTicket.rows"
+      [showCurrentPageReport]="true"
+      currentPageReportTemplate="{first} - {last} de {totalRecords}"
+      [totalRecords]="pageTicket.totalRecords"
+      [rowsPerPageOptions]="[20, 30,50,100]"/>
+  </ng-template>
+</p-table>

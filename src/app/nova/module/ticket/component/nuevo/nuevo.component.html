@@ -1,0 +1,124 @@
+@if (guardando) {
+  <app-spinner message="Procesando" [modal]="true"></app-spinner>
+}
+<p-dialog
+  (onHide)="closed()"
+  (visibleChange)="defaultForm($event)"
+  [(visible)]="visible"
+  [breakpoints]="{'1920px':'30vw', '1199px': '75vw', '575px': '95vw' }"
+  [closeOnEscape]="false"
+  [draggable]="false"
+  [modal]="true"
+  [resizable]="false"
+  [style]="{ width: '40vw' }">
+  <ng-template pTemplate="header">
+    <app-title
+      title="Registrar ticket"
+      description="Ingrese la información requerida"
+      background="bg-green-100"
+      icon-src="assets/icon/helpdesk/icon.png"></app-title>
+  </ng-template>
+  <div class="flex mb-3 gap-2">
+    <!--    <info-unidad-contacto [disabled]="!form.get('unidad').value"-->
+    <!--                          [id-unidad]="this.form.get('unidad')?.value?.id"></info-unidad-contacto>-->
+    <!--    <info-unidad-horario [disabled]="!form.get('unidad').value"-->
+    <!--                         [id-unidad]="this.form.get('unidad')?.value?.id"></info-unidad-horario>-->
+  </div>
+  <form (ngSubmit)="register()" [formGroup]="form">
+    <div class="formgrid grid mb-2">
+      <!--UNIDAD OPERATIVA-->
+      <div class="field col-12 md:col-6">
+        <label class="is-required font-medium">Unidad</label>
+        <p-dropdown
+          [filter]="true"
+          [options]="unidades"
+          filterBy="clave,nombre"
+          formControlName="unidad"
+          optionLabel="nombre"
+          styleClass="w-full">
+          <ng-template let-u pTemplate="selectedItem">
+            <div class="flex align-items-center gap-2">
+              {{ u["clave"] }} {{ u["nombre"] }}
+            </div>
+          </ng-template>
+          <ng-template let-unidad pTemplate="item">
+            <div class="w-full">
+              <div>{{ unidad["clave"] + " " + unidad["nombre"] }}</div>
+            </div>
+          </ng-template>
+        </p-dropdown>
+      </div>
+      <!--ÁREA DE SEGUIMIENTO-->
+      <div class="field col-12 md:col-6">
+        <label class="is-required font-medium">Área de seguimiento</label>
+        <p-dropdown
+          [options]="areas"
+          formControlName="area"
+          optionLabel="nombre"
+          styleClass="w-full"/>
+      </div>
+      <!--TIPO DE REPORTE-->
+      <div class="field col-12 md:col-12">
+        <label class="is-required font-medium">Tipo de reporte</label>
+        <p-dropdown [filter]="true" [options]="reportes" [showClear]="true"
+                    filterBy="nombre"
+                    formControlName="reporte"
+                    optionLabel="nombre"
+                    styleClass="w-full"></p-dropdown>
+      </div>
+      <!--FOLIO-->
+      @if (editFolio) {
+        <div class="field col-12 md:col-6">
+          <label class="is-required font-medium">Folio</label>
+          <input class="w-full" formControlName="folio" pInputText
+                 type="text">
+        </div>
+      }
+      <!--ESTATUS-->
+      <div [class.md:col-6]="editFolio" class="field col-12">
+        <label class="font-medium is-required">Estatus</label>
+        <p-dropdown
+          [options]="estatus"
+          [showClear]="true"
+          formControlName="estatus"
+          optionLabel="nombre"
+          styleClass="w-full"/>
+      </div>
+      <!--ATIENDE-->
+      <div class="field col-12 md:col-12">
+        <label class="font-medium" for="ag">Atiende</label>
+        <input class="w-full" formControlName="agente" id="ag" pInputText type="text">
+      </div>
+      <!--DETALLES-->
+      <div class="field col-12">
+
+        <p-editor
+          [style]="{'max-height':'300px','min-height':'200px','overflow':'auto'}"
+          formControlName="nota"
+          styleClass="border-top-1 pt-3 surface-border w-full h-auto"/>
+      </div>
+      <div class="field col-12 text-center">
+        <p-button label="Registrar" type="submit"/>
+      </div>
+    </div>
+  </form>
+
+</p-dialog>
+
+<!--MODAL DE CONFIRMACION PARA CONTINUAR O SALIR DEL PROCESO DE REGISTRO-->
+@defer (on idle; prefetch on idle) {
+  <p-confirmDialog>
+    <ng-template let-message pTemplate="message">
+      <div class="flex flex-column align-items-center w-full gap-3 border-bottom-1 surface-border">
+        <app-status
+          [title]="{text:'Reporte registrado',color:'text-blue-600'}"
+          icon-src="assets/icon/success/icon.svg">
+          <app-ticket [ticket]="resultData.data"></app-ticket>
+          <p-button icon="pi pi-copy" severity="secondary" (onClick)="copy()"/>
+        </app-status>
+        <p class="font-medium">{{ message.message }}</p>
+      </div>
+    </ng-template>
+  </p-confirmDialog>
+}
+

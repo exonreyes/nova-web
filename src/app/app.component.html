@@ -1,0 +1,8 @@
+<!--PROCESAMIENTO DE CARGA O VISUALIZACIÓN DE RUTAS-->
+@if (isLoading) {
+  <app-spinner [modal]="true" message="Iniciando módulo, espere un momento"></app-spinner>
+} @else {
+  <router-outlet></router-outlet>
+}
+<p-toast position="top-center"/>
+

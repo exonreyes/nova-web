@@ -1,0 +1,12 @@
+<div class="flex align-items-center">
+  <img
+    [ngClass]="[background, padding]"
+    [ngSrc]="icon"
+    alt="img"
+    class="border-round"
+    height="32" width="32"/>
+  <div class="flex flex-column ml-3">
+    <span class="font-semibold text-lg">{{ title }}</span>
+    <p>{{ description }}</p>
+  </div>
+</div>

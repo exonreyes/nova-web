@@ -1,0 +1,24 @@
+.h-content {
+  height: calc(100vh - 187px);
+}
+
+:host ::ng-deep .max-h-desc {
+  max-height: calc(100vh - 430px);
+}
+
+.max-h-timeline {
+  max-height: calc(100vh - 200px);
+}
+
+:host ::ng-deep .p-timeline-event-opposite {
+  max-width: 3rem;
+  max-height: 3rem;
+}
+
+:host ::ng-deep .p-timeline-event-content {
+  padding-top: 5px;
+  margin-left: 2px;
+  padding-bottom: 5px;
+  margin-bottom: 10px;
+  border-radius: 5px;
+}

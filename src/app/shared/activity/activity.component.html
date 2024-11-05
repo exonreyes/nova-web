@@ -1,0 +1,25 @@
+@if (actividad) {
+  <p-timeline [value]="actividad">
+    <ng-template let-event pTemplate="content">
+      <div class="flex justify-content-between">
+        <small class="p-text-secondary">{{ event.creado }}</small>
+        <small class="p-text-secondary">{{ event.agente }}</small>
+      </div>
+      <p-editor [modules]="[]" [ngModel]="event.descripcion" [readonly]="true" [style]="{ height: 'auto' }"
+                styleClass=" mt-2">
+      </p-editor>
+    </ng-template>
+    <ng-template let-event pTemplate="opposite">
+            <span [class.p-tag-success]="event.estatus.toLowerCase() === 'abierto'"
+                  [class.p-tag-warning]="event.estatus.toLowerCase() === 'pendiente'"
+                  class="p-tag p-component">{{ event.estatus }}
+            </span>
+    </ng-template>
+  </p-timeline>
+} @else {
+  <!--EN CASO DE NO EXISTIR HISTORIAL-->
+  <div class="flex flex-column justify-content-center align-items-center mt-4 h-20rem">
+    <i class="text-primary pi pi-pen-to-square" style="font-size: 3rem"></i>
+    <h6>Sin cambios registrados</h6>
+  </div>
+}

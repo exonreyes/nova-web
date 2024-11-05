@@ -1,0 +1,35 @@
+<app-title
+  title="Tickets"
+  description="Administra las incidencias y seguimientos"
+  icon-src="assets/icon/document/icon.png"/>
+<p-toolbar styleClass="my-2">
+  <div class="p-toolbar-group-start">
+    <p-button (onClick)="openNew=true" icon="pi pi-plus" severity="success"></p-button>
+    <p-button (onClick)="openSearch=true" [outlined]="true" class="ml-1" icon="pi pi-ticket" label="Consultar folio"
+              severity="secondary"></p-button>
+  </div>
+  <div class="p-toolbar-group-end">
+    <p-button (onClick)="openFilter=true" [icon]="filtroActivo?'pi pi-filter-slash':'pi pi-filter'"/>
+  </div>
+</p-toolbar>
+<div class="h-content border-round surface-section p-1 border-1 surface-border">
+  <tabla-ticket/>
+</div>
+
+
+@defer (when openNew; prefetch when openNew) {
+  <nuevo-ticket [visible]="openNew" (closedComponent)="openNew=false"></nuevo-ticket>
+} @loading {
+  <app-spinner [modal]="true"></app-spinner>
+}
+
+@defer (when openSearch; prefetch when openSearch) {
+  <buscar-ticket [visible]="openSearch" (closedComponent)="openSearch=false"></buscar-ticket>
+} @loading {
+  <app-spinner [modal]="true"></app-spinner>
+}
+@defer (when openFilter; prefetch when openFilter) {
+  <filtro-ticket [visible]="openFilter" (closedComponent)="openFilter=false"></filtro-ticket>
+} @loading {
+  <app-spinner [modal]="true"></app-spinner>
+}

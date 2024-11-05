@@ -1,0 +1,42 @@
+@if (guardando) {
+  <app-spinner message="Procesando" [modal]="true"></app-spinner>
+}
+@if (visible) {
+  <p-dialog
+    (visibleChange)="defaultForm($event)"
+    [(visible)]="visible" [modal]="true" [style]="{ width: '43rem' }">
+    <ng-template pTemplate="header">
+      <app-title
+        background="bg-blue-50" icon-src="assets/icon/followup/icon.svg"
+        title="Registrar seguimiento"
+        description="Nuevos cambios o seguimiento"/>
+    </ng-template>
+    <form class="formgrid grid" (ngSubmit)="registrar()" [formGroup]="form" method="post">
+      <div class="field col-6">
+        <label for="agt">Atiende</label>
+        <input
+          formControlName="agente"
+          class="text-base text-color surface-overlay p-2 border-1 border-solid surface-border border-round appearance-none outline-none focus:border-primary w-full"
+          id="agt"
+          type="text">
+      </div>
+      <div class="field col-6">
+        <label class="font-medium">Estatus</label>
+        <p-dropdown
+          [options]="estatus"
+          [showClear]="true"
+          formControlName="estatus"
+          optionLabel="nombre"
+          styleClass="w-full"/>
+      </div>
+      <div class="field col-12">
+        <label>Comentario</label>
+        <p-editor formControlName="descripcion" [style]="{ height: '200px' }"></p-editor>
+      </div>
+      <div class="field col-12 text-center">
+        <p-button [disabled]="!form.valid"
+                  label="Guardar" type="submit"/>
+      </div>
+    </form>
+  </p-dialog>
+}

@@ -1,0 +1,79 @@
+<p-sidebar (onHide)="closed()" [(visible)]="visible" position="right" styleClass="w-30rem">
+  <ng-template pTemplate="header">
+    <app-title
+      title="Filtros de consulta" background="bg-bluegray-50"
+      icon-src="assets/icon/list/icon.png"></app-title>
+  </ng-template>
+  <!--FILTROS DE CONSULTA-->
+  <form (ngSubmit)="searchByFilter()" [formGroup]="form" method="get">
+    <!--FILTRO POR FECHA [DESDE-HASTA] DE REGISTRO-->
+    <div class="field flex  gap-2">
+      <div class="field">
+        <label class="font-medium">Desde </label>
+        <p-calendar
+          [maxDate]="hoy"
+          [showButtonBar]="true"
+          dateFormat="dd/mm/yy"
+          formControlName="desde"
+          inputId="icondisplay"/>
+      </div>
+      <div class="field">
+        <label class="font-medium">Hasta</label>
+        <p-calendar
+          [maxDate]="hoy"
+          [showButtonBar]="true"
+          dateFormat="dd/mm/yy"
+          formControlName="hasta"
+          inputId="icondisplay"/>
+      </div>
+    </div>
+    <!--FILTRO POR UNIDAD-->
+    <div class="field">
+      <label class="font-medium">Unidad</label>
+      <p-dropdown
+        [filter]="true"
+        [options]="unidades"
+        [showClear]="true"
+        filterBy="clave,nombre"
+        formControlName="unidad"
+        optionLabel="nombre"
+        styleClass="w-full">
+        <ng-template let-u pTemplate="selectedItem">
+          <div class="flex align-items-center gap-2">
+            {{ u["clave"] }} {{ u["nombre"] }}
+          </div>
+        </ng-template>
+        <ng-template let-unidad pTemplate="item">
+          <div class="w-full">
+            <div>{{ unidad["clave"] + " " + unidad["nombre"] }}</div>
+          </div>
+        </ng-template>
+      </p-dropdown>
+
+    </div>
+    <!--FILTRO POR AREA DE SEGUIMIENTO-->
+    <div class="field">
+      <label class="font-medium">Área de seguimiento</label>
+      <p-dropdown
+        [options]="areas"
+        [showClear]="true"
+        formControlName="area"
+        optionLabel="nombre"
+        styleClass="w-full"/>
+    </div>
+    <!--FILTRO POR ESTATUS DEL REPORTE-->
+    <div class="field">
+      <label class="font-medium">Estatus del reporte</label>
+      <p-dropdown
+        [options]="estatus"
+        [showClear]="true"
+        formControlName="estatus"
+        optionLabel="nombre"
+        styleClass="w-full"/>
+    </div>
+    <div class="flex justify-content-center gap-2">
+      <p-button (onClick)="clearFilter()" label="Limpiar filtros" severity="secondary"/>
+      <p-button label="Aplicar filtros" type="submit"/>
+    </div>
+  </form>
+</p-sidebar>

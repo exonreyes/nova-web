@@ -1,0 +1,96 @@
+<app-title
+  title="Detalles"
+  description="Estado actual e historial de cambios"
+  icon-src="assets/icon/register/icon.png"
+/>
+@if (ticketData) {
+  <!--BARRA DE OPCIONES-->
+  <p-toolbar styleClass="mt-2">
+    @if (ticketData.estatus.nombre.toLowerCase() !== 'cerrado') {
+      <div class="p-toolbar-group-start">
+        <p-button
+          label="SeguimientoData"
+          (onClick)="nuevoSeguimiento=true"
+          icon="pi pi-plus"
+          styleClass="mr-1"
+          severity="success"/>
+        <p-button icon="pi pi-lock" outlined
+                  label="Cerrar"
+                  severity="secondary"/>
+      </div>
+    }
+    <div class="p-toolbar-group-end">
+      <p-button severity="secondary" icon="pi pi-copy" (onClick)="copy()"/>
+      <p-button icon="pi pi-share-alt"
+                styleClass="ml-1"
+                label="Publicar"
+                severity="secondary"/>
+    </div>
+  </p-toolbar>
+
+  <div class="flex flex-column md:flex-row mt-2 gap-2 h-content">
+    <!--PANEL DE INFORMACION DE REGISTRO-->
+    <p-panel class="col md:col-5 p-0" styleClass="h-full" header="Información de registro">
+      @if (procesando) {
+        <app-spinner message="Obteniendo datos"/>
+      } @else {
+        <div class="flex flex-column">
+          <div class="font-semibold text-blue-700 text-lg">{{ ticketData.reporte.nombre }}</div>
+          <span class="text-orange-700 font-medium">{{ ticketData.area.nombre }}</span>
+        </div>
+        <div class="border-bottom-1 surface-border my-3"></div>
+        <div class="grid">
+          <!--UNIDAD-->
+          <div class="col-12">
+            <span class="font-medium text-color-secondary">Unidad</span>
+            <p class="font-semibold">{{ ticketData.unidad.clave }} {{ ticketData.unidad.nombre }}</p>
+          </div>
+          <!--FOLIO-->
+          <div class="col-6">
+            <span class="font-medium text-color-secondary">Folio de seguimiento</span>
+            <p class="font-semibold">{{ ticketData.folio }}</p>
+          </div>
+          <!--ESTATUS-->
+          <div class="col-6">
+            <span class="font-medium text-color-secondary">Estatus</span>
+            <p class="font-semibold">{{ ticketData.estatus.nombre }}</p>
+          </div>
+          <!--ATIENDE-->
+          <div class="col-6">
+            <span class="font-medium text-color-secondary">Atiende</span>
+            <p class="font-semibold">{{ ticketData.agente }}</p>
+          </div>
+          <!--FECHA DE REGISTRO-->
+          <div class="col-6">
+            <span class="font-medium text-color-secondary">Registrado</span>
+            <p class="font-semibold">{{ ticketData.creado }}</p>
+          </div>
+          <!--COMENTARIOS ADICIONALES-->
+          <div class="col-12">
+            <span class="font-medium text-color-secondary">Comentario adicional</span>
+            <p-editor [readonly]="true" [modules]="[]" styleClass="mt-2 max-h-desc overflow-auto"
+                      [ngModel]="ticketData.descripcion"></p-editor>
+          </div>
+        </div>
+      }
+    </p-panel>
+    <!--PANEL DE HISTORIAL DE CAMBIOS-->
+    <p-panel class="col md:col-7 p-0 md:pr-2" styleClass="h-full" header="Historial de cambios">
+      <div class="max-h-timeline overflow-auto fadein animation-duration-1000">
+        @if (procesandoHistory) {
+          <app-spinner message="Verificando cambios"></app-spinner>
+        } @else {
+          <app-activity [actividad]="historial"/>
+        }
+      </div>
+    </p-panel>
+  </div>
+} @else {
+  <app-spinner message="Obteniendo información"></app-spinner>
+}
+@defer (when nuevoSeguimiento; prefetch when nuevoSeguimiento) {
+  <app-nuevo-seguimiento [id-ticket]="ticketData.id" [visible]="nuevoSeguimiento"
+                         (closed)="cerrarModal($event)"></app-nuevo-seguimiento>
+} @loading {
+  <app-spinner message="Un momento" [modal]="true"></app-spinner>
+}
